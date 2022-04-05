@@ -55,7 +55,6 @@ struct AddTaskView: View {
                 }.disabled(isNameEmpty())
                 Spacer()
             }
-            
             .navigationTitle("Add task")
             .navigationBarTitleDisplayMode(.inline)
         }

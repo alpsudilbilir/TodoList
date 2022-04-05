@@ -7,7 +7,7 @@
 
 import SwiftUI
 import CoreData
-struct ContentView: View {
+struct TaskView: View {
     @Environment(\.managedObjectContext) private var moc
     @FetchRequest(sortDescriptors: [NSSortDescriptor(key: "date", ascending: false)]) var tasks: FetchedResults<Task>
     @FetchRequest(sortDescriptors: [NSSortDescriptor(key: "date", ascending: false)]) var doneTasks: FetchedResults<Donetask>
@@ -39,8 +39,6 @@ struct ContentView: View {
                                 NavigationLink("") {
                                     DetailsView(task: task, doneTask: nil, isTask: true)
                                 }
-                                
-                                
                             }
                         }
                         .onDelete(perform: deleteTasks)
@@ -71,7 +69,6 @@ struct ContentView: View {
                                 NavigationLink("") {
                                     DetailsView(task: nil, doneTask: donetask, isTask: false)
                                 }
-                                
                             }
                         }
                         .onDelete(perform: deleteDoneTasks)
@@ -85,6 +82,9 @@ struct ContentView: View {
             }
             .navigationTitle("Today's Tasks")
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    EditButton()
+                }
                 ToolbarItem {
                     Button("Add Task") {
                         showAddScreen = true
@@ -102,24 +102,18 @@ struct ContentView: View {
         }
     }
     func finishDay() {
-        //Delete Task Entity items
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Task")
-        // Configure Fetch Request
         fetchRequest.includesPropertyValues = false
         do {
             let taskItems = tasks
-
+            
             for item in taskItems {
                 moc.delete(item)
             }
-
-            // Save Changes
             try moc.save()
-
         } catch {
             print("Failed to delete.")
         }
-        //Delete DoneTask Entity items
         let fetchRequest2 = NSFetchRequest<NSFetchRequestResult>(entityName: "Donetask")
         fetchRequest2.includesPropertyValues = false
         do {
@@ -131,7 +125,6 @@ struct ContentView: View {
         } catch {
             print("Failed to delete.")
         }
-        
     }
     func selectColor(priority: String) -> Color {
         switch priority {
@@ -162,7 +155,7 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        TaskView()
             .preferredColorScheme(.dark)
             .accessibilityIdentifier(/*@START_MENU_TOKEN@*/"Identifier"/*@END_MENU_TOKEN@*/)
     }

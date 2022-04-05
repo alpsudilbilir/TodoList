@@ -12,7 +12,7 @@ struct TodoSwiftUIApp: App {
     @StateObject private var dataController = DataController()
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            TaskView()
                 .environment(\.managedObjectContext, dataController.container.viewContext)
         }
     }
